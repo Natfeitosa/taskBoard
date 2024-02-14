@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth Server", "Auth Server.csproj", "{FDEFBA34-1C05-4EAE-8BBA-E341496C0752}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth Server", "Auth Server\Auth Server.csproj", "{FDEFBA34-1C05-4EAE-8BBA-E341496C0752}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Core", "..\AuthServer.Core\AuthServer.Core.csproj", "{DD4DE9F8-8423-4163-BE6C-89D8F1B1ABD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Core", "AuthServer.Core\AuthServer.Core.csproj", "{DD4DE9F8-8423-4163-BE6C-89D8F1B1ABD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
