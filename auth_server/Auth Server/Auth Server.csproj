@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Auth_Server</RootNamespace>
+    <RootNamespace>AuthServer.Web</RootNamespace>
     <UserSecretsId>fffbb2e4-4360-4e4c-9ae2-6e93e4388110</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
