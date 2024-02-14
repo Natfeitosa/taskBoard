@@ -5,3 +5,5 @@
 /auth_server/Auth Server/bin
 /auth_server/Auth Server/.vs/Auth Server/FileContentIndex/288a7982-df5d-4cbd-a358-8440d724c194.vsidx
 /auth_server/Auth Server/.vs/Auth Server/v17/.suo
+/auth_server/AuthServer.Core/bin
+/auth_server/AuthServer.Core/obj
