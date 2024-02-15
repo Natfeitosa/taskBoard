@@ -12,5 +12,6 @@ namespace AuthServer.Database.Interface
         public Task<User> GetUserById(Guid id);
         public Task<ICollection<User>> GetAllUsers();
         public Task DeleteUserById(User user);
+        public Task CreateUser(User user);
     }
 }
