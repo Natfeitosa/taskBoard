@@ -11,3 +11,4 @@
 /auth_server/AuthServer.Database/bin
 /auth_server/AuthServer.Test/obj
 /auth_server/AuthServer.Test/bin
+.vscode/launch.json
