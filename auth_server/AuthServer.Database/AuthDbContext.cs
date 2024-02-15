@@ -1,12 +1,12 @@
 ﻿using AuthServer.Database.Entity;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace AuthServer.Database
 {
-    public class UserDbContext:DbContext
+    public class AuthDbContext:DbContext
     {
+        public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
-
-        public UserDbContext(DbContextOptions<UserDbContext> options):base(options) { }
-    } 
+    }
 }

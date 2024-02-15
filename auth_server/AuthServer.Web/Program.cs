@@ -10,12 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("MySqlString");
-if (connectionString == null)
-{
-    throw new Exception("No Connection String Available");
-}
 
-builder.Services.AddDbContext<UserDbContext>(options =>
+
+builder.Services.AddDbContext<AuthDbContext>(options =>
 {
     options.UseMySQL(connectionString);
 });
