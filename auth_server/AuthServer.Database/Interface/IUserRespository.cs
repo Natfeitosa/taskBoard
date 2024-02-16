@@ -9,6 +9,11 @@ namespace AuthServer.Database.Interface
 {
     public interface IUserRepository:IRepository<User>
     {
-        public Task<User> GetUserByEmailAsync(string email);
+        /// <summary>
+        /// Gets a User by Email
+        /// </summary>
+        /// <param name="email">Email of the User</param>
+        /// <returns>User If found, otherwise null</returns>
+        public Task<User?> GetUserByEmailAsync(string email);
     }
 }

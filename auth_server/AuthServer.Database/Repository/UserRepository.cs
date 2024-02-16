@@ -20,24 +20,28 @@ namespace AuthServer.Database.Repository
             UserSet = context.Users;
         }
 
-        public Task DeleteAsync(User entity)
+        public async Task DeleteAsync(User entity)
         {
-            throw new NotImplementedException();
+            UserSet.Remove(entity);
+            await SaveContext();
         }
 
-        public Task<ICollection<User>> GetAll()
+        public async Task<ICollection<User>> GetAll()
         {
-            throw new NotImplementedException();
+            var users = await UserSet.ToListAsync();
+            return users;
         }
 
-        public Task<User> GetById(Guid id)
+        public async Task<User?> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            var user = await UserSet.SingleOrDefaultAsync(x => x.Id == id);
+            return user;
         }
 
-        public Task<User> GetUserByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var user = await UserSet.SingleOrDefaultAsync(x => x.Email == email);
+            return user;
         }
 
         public async Task InsertAsync(User entity)
