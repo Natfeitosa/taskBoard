@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Database.Interface
 {
-    public interface IRepository
+    public interface IRepository<T>
     {
         /// <summary>
         /// Inserts Entity to database
         /// </summary>
         /// <returns></returns>
-        public Task InsertAsync();
-        public Task UpdateAsync();
-        public Task DeleteAsync();
-        public Task GetById();
-        public Task<ICollection> GetAll();
+        public Task InsertAsync(T entity);
+        public Task UpdateAsync(T entity);
+        public Task DeleteAsync(T entity);
+        public Task<T> GetById(Guid id);
+        public Task<ICollection<T>> GetAll();
     }
 }
