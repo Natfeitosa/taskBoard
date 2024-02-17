@@ -13,5 +13,11 @@ namespace AuthServer.Web.Controllers
         {
             return Ok();
         }
+
+        [HttpPost("/register")]
+        public async Task<ActionResult> RegisterUser(RegisterUserDto data)
+        {
+            return Ok();
+        }
     }
 }
