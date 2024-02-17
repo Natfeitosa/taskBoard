@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Database.Interface
 {
-    public interface IUserRespository:IRepository
+    public interface IUserRepository:IRepository<User>
     {
-        public Task<User> GetUserById(Guid id);
-        public Task<ICollection<User>> GetAllUsers();
-        public Task DeleteUserById(User user);
-        public Task CreateUser(User user);
+        /// <summary>
+        /// Gets a User by Email
+        /// </summary>
+        /// <param name="email">Email of the User</param>
+        /// <returns>User If found, otherwise null</returns>
+        public Task<User?> GetUserByEmailAsync(string email);
     }
 }
