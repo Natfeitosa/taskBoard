@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AuthServer.Database\AuthServer.Database.csproj" />
-    <ProjectReference Include="..\AuthServer.Web\AuthServer.Web.csproj" />
   </ItemGroup>
 
 </Project>

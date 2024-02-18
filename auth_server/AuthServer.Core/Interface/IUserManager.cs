@@ -1,4 +1,5 @@
-﻿using AuthServer.Web.Dto;
+﻿using AuthServer.Core.Model;
+using AuthServer.Database.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,18 @@ namespace AuthServer.Core.Interface
 {
     public interface IUserManager
     {
-        Task<UserToken> LogInUser(LogInDto data);
-        Task RegisterUser(RegisterUserDto data);
+        /// <summary>
+        /// Checks against the database to if the user account exist and correct Password was given. If the information is correct JWT will be sent back
+        /// </summary>
+        /// <param name="data">Log in data information</param>
+        /// <returns>User JWT</returns>
+        Task<UserToken> LogInUser(LoginData data);
+
+        /// <summary>
+        /// Registers a new user to the database
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        Task RegisterUser(User data);
     }
 }
