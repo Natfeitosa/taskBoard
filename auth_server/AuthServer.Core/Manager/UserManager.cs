@@ -25,6 +25,7 @@ namespace AuthServer.Core.Manager
         public async Task RegisterUser(User data)
         {
             var user = await _userRepository.GetUserByEmailAsync(data.Email);
+            //TODO:Add logic to handle when user already exist
             if(user != null) { throw new Exception("User account alreadty exist"); }
             await _userRepository.InsertAsync(data);
 
