@@ -30,5 +30,7 @@ namespace AuthServer.Core.Manager
             await _userRepository.InsertAsync(data);
 
         }
+
+       
     }
 }
