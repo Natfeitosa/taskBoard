@@ -9,7 +9,13 @@ namespace AuthServer.Web.Controllers
     public class AuthController : ControllerBase
     {
         [HttpPost("/logIn")]
-        public async Task<ActionResult<UserToken>> LogInUser(LogInDto data)
+        public async Task<ActionResult<UserTokenDto>> LogInUser(LogInDto data)
+        {
+            return Ok();
+        }
+
+        [HttpPost("/register")]
+        public async Task<ActionResult> RegisterUser(RegisterUserDto data)
         {
             return Ok();
         }
