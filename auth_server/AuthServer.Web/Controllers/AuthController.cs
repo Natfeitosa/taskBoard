@@ -1,6 +1,7 @@
 ﻿using AuthServer.Core.Interface;
 using AuthServer.Core.Model;
 using AuthServer.Web.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,8 +20,9 @@ namespace AuthServer.Web.Controllers
         public async Task<ActionResult<UserTokenDto>> LogInUser(LogInDto data)
         {
             var logInData = new LoginData() { Password = data.Password, Username= data.Username };
-            _userManager.LogInUser(logInData);
-            return Ok();
+           var token= await _userManager.LogInUser(logInData);
+            var tokenDto = new UserTokenDto() { AccessToken=token.AccessToken,RefreshToken=token.RefreshToken};
+            return Ok(tokenDto);
         }
 
         [HttpPost("/register")]
@@ -28,5 +30,14 @@ namespace AuthServer.Web.Controllers
         {
             return Ok();
         }
+
+        [Authorize]
+        [HttpGet("/Health")]
+        public ActionResult HealthCheck()
+        {
+            return Ok();
+        }
+
+        
     }
 }

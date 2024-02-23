@@ -1,0 +1,36 @@
+name: dockercompose3433360198195536313
+services:
+  authserver.web:
+    build:
+      context: C:\Users\natfe\Projects\taskBoard\auth_server\AuthServer.Web
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+    image: authserverweb
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\natfe\AppData\Roaming/Microsoft/UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\natfe\AppData\Roaming/ASP.NET/Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+networks:
+  default:
+    name: dockercompose3433360198195536313_default
