@@ -13,3 +13,4 @@
 /auth_server/AuthServer.Test/bin
 .vscode/launch.json
 python_backend/venv/*
+.env
