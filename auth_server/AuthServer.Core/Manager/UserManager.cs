@@ -9,25 +9,29 @@ namespace AuthServer.Core.Manager
     public class UserManager : IUserManager
     {
         private readonly IUserRepository _userRepository;
-        public UserManager(IUserRepository userRepo) {
+        private readonly ITokenManager _tokenManager;
+        public UserManager(IUserRepository userRepo, ITokenManager tokenManager) {
         _userRepository = userRepo;
+            _tokenManager = tokenManager;
         }
         public async Task<UserToken> LogInUser(LoginData data)
         {
             var user = await _userRepository.GetUserByEmailAsync(data.Username);
             //TODO: ADD LOGIC OR GLOBAL HANDLER FOR FAILED LOG IN
             if(user == null || data.Password != data.Password) { throw new Exception("Failed to log in"); }
-            //TODO: ADD LOGIC TO GENERATE JWT AND SAVE IT IN ORDER TO REFRESH IT
-            var token = new UserToken() { AccessToken = "access Token", RefreshToken = "Refresh Token" };
-            return token;
+            var accessToken = _tokenManager.GenerateToken(user);
+            return new UserToken() { AccessToken = accessToken, RefreshToken = accessToken };
         }
 
         public async Task RegisterUser(User data)
         {
             var user = await _userRepository.GetUserByEmailAsync(data.Email);
+            //TODO:Add logic to handle when user already exist
             if(user != null) { throw new Exception("User account alreadty exist"); }
             await _userRepository.InsertAsync(data);
 
         }
+
+       
     }
 }
