@@ -1,5 +1,6 @@
 ﻿using AuthServer.Core.Interface;
 using AuthServer.Core.Model;
+using AuthServer.Database.Entity;
 using AuthServer.Web.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +28,14 @@ namespace AuthServer.Web.Controllers
 
         [HttpPost("/register")]
         public async Task<ActionResult> RegisterUser(RegisterUserDto data)
-        {
+        { 
+         var registerUser = new RegisterUser() {
+             Email = data.Email,
+             Password = data.Password,
+             FirstName = data.FirstName,
+             LastName = data.LastName,
+         };
+            await _userManager.RegisterUser(registerUser);
             return Ok();
         }
 

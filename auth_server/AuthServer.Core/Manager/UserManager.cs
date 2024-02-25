@@ -23,12 +23,23 @@ namespace AuthServer.Core.Manager
             return new UserToken() { AccessToken = accessToken, RefreshToken = accessToken };
         }
 
-        public async Task RegisterUser(User data)
+        public async Task RegisterUser(RegisterUser data)
         {
+            
             var user = await _userRepository.GetUserByEmailAsync(data.Email);
             //TODO:Add logic to handle when user already exist
             if(user != null) { throw new Exception("User account alreadty exist"); }
-            await _userRepository.InsertAsync(data);
+            var id = Guid.NewGuid();
+
+            var newUser = new User() {
+            IsDeleted = false,
+            Id = id,
+            FirstName = data.FirstName,
+            LastName = data.LastName,
+            Email = data.Email,
+            Password = data.Password,
+            };
+            await _userRepository.InsertAsync(newUser);
 
         }
 
