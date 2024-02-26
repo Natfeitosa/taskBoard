@@ -7,6 +7,7 @@ using AuthServer.Database.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics.Metrics;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,10 @@ var connectionString = builder.Configuration.GetConnectionString("MySqlString");
 builder.Services.AddDbContext<AuthDbContext>(options =>
 {
     options.UseMySQL(connectionString);
+    
+
 });
+
 //Sets up the Token validation parameters
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -51,7 +55,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//Auto Migrates the database 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+    db.Database.Migrate();
+}
+    app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
