@@ -22,6 +22,6 @@ namespace AuthServer.Core.Interface
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        Task RegisterUser(User data);
+        Task RegisterUser(RegisterUser data);
     }
 }
