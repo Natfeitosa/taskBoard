@@ -1,16 +1,22 @@
-from pydantic import BaseModel, EmailStr, ValidationError
-from datetime import datetime
+from pydantic import BaseModel, EmailStr
 
+class UserLogin(BaseModel):
+    username: EmailStr
+    password: str
+    
+class UserLoginOut(BaseModel):
+    username: EmailStr
+    
+    class Config:
+        orm_mode = True
 
-class UserBase(BaseModel):
+class UserRegister(BaseModel):
+    firstName: str
+    lastName: str
     email: EmailStr
     password: str
     
-class UserRegister(UserBase):
-    firstName: str
-    lastName: str
-    
-class UserOut(BaseModel):
+class UserRegisterOut(BaseModel):
     firstName: str
     lastName: str
     email: EmailStr

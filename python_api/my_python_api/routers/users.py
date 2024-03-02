@@ -6,38 +6,35 @@ from typing import Annotated
 import requests
 import os
 
+os.environ["AUTH_SERVER_URL"] = "http://localhost:5013"
 authServerURL = os.environ.get("AUTH_SERVER_URL")
 router = APIRouter(
     tags=['Users']
 )
 
 # Register endpoint
-@router.post("/register", response_model=schemas.UserOut)
+@router.post("/register", status_code=status.HTTP_200_OK, response_model=schemas.UserRegisterOut)
 def register_user(newUser: schemas.UserRegister):
-    # Hash the password
-    hashedPassword = utils.hash(newUser.password)
-    newUser.password = hashedPassword
-    # Send call to auth server
-    address = authServerURL + "/register"
-    response = requests.post(address)
-    if response.status_code == 500:
-        
-    return new_register
-
-@router.get("/health")
-def auth_login(authorization: Annotated[str | None, Header() ] = None):
-    header = {"Authorization": f"{authorization}"}
-    address = authServerURL + "/Health"
-    response = requests.get(address, headers=header)
+    # Sends call to auth server
+    address = f"{authServerURL}/register"
+    response = requests.post(address, json=newUser.model_dump(), headers={"Content-Type": "application/json"})
+    
+    # Handles response
     if response.status_code == 200:
-        return response
-    elif response.status_code == 401:
-        return "invalid token"
+        return newUser
     else:
-        return "server died"
+        raise HTTPException(status_code=response.status_code, detail="Unexpected Error")
 
-
-@router.get("/login", status_code=status.HTTP_200_OK, response_model=schemas.UserOut)
-def test_login(user: schemas.UserBase, db: Session = Depends(get_db)):
-    logins = db.query(models.Login).first()
-    return {"status": logins}
+# Login endpoint
+@router.post("/login", status_code=status.HTTP_200_OK, response_model=schemas.UserLoginOut)
+def login_user(loginData: schemas.UserLogin):
+    # Sends call to auth server
+    address = f"{authServerURL}/login"
+    response = requests.post(address, json=loginData.model_dump(), headers={"Content-Type": "application/json"})
+    
+    # Handles response
+    if response.status_code == 200:
+        token = response.json().get("token")
+        return loginData
+    else:
+        raise HTTPException(status_code=response.status_code, detail="Invalid credentials")
