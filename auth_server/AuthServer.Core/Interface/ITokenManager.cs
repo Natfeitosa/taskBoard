@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Core.Interface
 {
-    public interface ITokenManager
-    {
-        public string GenerateToken(User user);
-        public  string VerifyToken(string token);
-    }
+  public interface ITokenManager
+  {
+    public string GenerateToken(User user);
+  }
 }
