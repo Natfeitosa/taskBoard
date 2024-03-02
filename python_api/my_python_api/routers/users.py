@@ -34,7 +34,13 @@ def login_user(loginData: schemas.UserLogin):
     
     # Handles response
     if response.status_code == 200:
-        token = response.json().get("token")
-        return loginData
+        tokens = response.json()
+        accessToken = tokens.get("accessToken")
+        refreshToken = tokens.get("refreshToken")
+        return schemas.UserLoginOut(
+            username=loginData.username,
+            access_token=accessToken,
+            refresh_token=refreshToken
+        )
     else:
         raise HTTPException(status_code=response.status_code, detail="Invalid credentials")
