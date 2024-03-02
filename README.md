@@ -46,6 +46,7 @@ Tasks model represents a task within a project.
         public DateOnly DateCreated { get; set; }
         public DateTime LastModified { get; set; }
         public Guid AssigneeId { get; set; }
+        public Guid Id { get;set; } 
     }
 ```
 
