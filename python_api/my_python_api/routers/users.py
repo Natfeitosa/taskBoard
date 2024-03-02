@@ -1,5 +1,5 @@
 from .. import schemas
-from fastapi import status, HTTPException, APIRouter
+from fastapi import status, HTTPException, APIRouter, Response
 import requests
 import os
 
@@ -24,7 +24,7 @@ def register_user(newUser: schemas.UserRegister):
 
 # Login endpoint
 @router.post("/login", status_code=status.HTTP_200_OK, response_model=schemas.UserLoginOut)
-def login_user(loginData: schemas.UserLogin):
+def login_user(loginData: schemas.UserLogin, responseCookie: Response):
     # Sends call to auth server
     address = f"{authServerURL}/login"
     response = requests.post(address, json=loginData.model_dump(), headers={"Content-Type": "application/json"})
@@ -33,11 +33,10 @@ def login_user(loginData: schemas.UserLogin):
     if response.status_code == 200:
         tokens = response.json()
         accessToken = tokens.get("accessToken")
+        # TO DO
         refreshToken = tokens.get("refreshToken")
-        return schemas.UserLoginOut(
-            username=loginData.username,
-            access_token=accessToken,
-            refresh_token=refreshToken
-        )
+        # Sets token in a cookie
+        responseCookie.set_cookie(key="access_token", value=accessToken, httponly=True, secure=True, samesite='lax')
+        return loginData
     else:
         raise HTTPException(status_code=response.status_code, detail="Invalid credentials")
