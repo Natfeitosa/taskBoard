@@ -3,14 +3,10 @@ from .my_python_api.database import engine
 from .my_python_api.models import Base
 from .my_python_api.routers import users
 import os
-import requests
-
-os.environ["AUTH_SERVER_URL"] = "http://localhost:5013"
 
 app = FastAPI()
 app.include_router(users.router)
 Base.metadata.create_all(bind=engine)
-authServerURL = os.environ.get("AUTH_SERVER_URL")
 
 def getTokenFromCookie(request: Request):
     token = request.cookies.get("access_token")
@@ -25,3 +21,4 @@ async def root():
 @app.get("/protected")
 def protected_endpoint(token: str = Depends(getTokenFromCookie)):
     return f"Your token is: {token}"
+

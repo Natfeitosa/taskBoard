@@ -1,10 +1,11 @@
 from .. import schemas
+from ..config import settings
 from fastapi import status, HTTPException, APIRouter, Response
 import requests
 import os
 
-os.environ["AUTH_SERVER_URL"] = "http://localhost:5013"
-authServerURL = os.environ.get("AUTH_SERVER_URL")
+
+authServerURL = f'{settings.auth_database_url}'
 router = APIRouter(
     tags=['Users']
 )
