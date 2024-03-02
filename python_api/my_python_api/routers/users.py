@@ -1,8 +1,5 @@
-from .. import models, schemas, utils
-from fastapi import status, HTTPException, Depends, APIRouter, Header, Cookie
-from sqlalchemy.orm import Session
-from ..database import get_db
-from typing import Annotated
+from .. import schemas
+from fastapi import status, HTTPException, APIRouter
 import requests
 import os
 

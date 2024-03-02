@@ -1,10 +1,8 @@
-from fastapi import FastAPI, Header, Cookie
-from typing import Annotated
+from fastapi import FastAPI
 from .my_python_api.database import engine
 from .my_python_api.models import Base
 from .my_python_api.routers import users
 import os
-import requests
 
 os.environ["AUTH_SERVER_URL"] = "http://localhost:5013"
 

@@ -22,6 +22,5 @@ class UserRegisterOut(BaseModel):
     firstName: str
     lastName: str
     email: EmailStr
-    
     class Config:
         orm_mode = True
