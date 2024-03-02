@@ -4,7 +4,8 @@ Task board application implementing backend web design
 
 ## Project
 Project Class Documentation
-This document describes the Project model.
+This document describes the Project model.  
+Please choose between AuthorID or the whole Author model for the project scheme. **NOT BOTH**
 
 - id (Guid): A unique identifier for the project. This property is of type Guid and is always public and accessible.  
 - Tasks (ICollection<Tasks>): A collection of Task objects associated with the project. This property allows for null values and should be accessed through the get method only.  
@@ -61,3 +62,9 @@ The status enum represents thet state of a particular task within a project. As 
        Completed=2
     }
 ```
+# Allowed Operations
+- Users allowed to create and modify projects. There is no limit to how many projects a user can create.
+- Users are not allowed to delete other users' projects, but they are allowed to delete their own projects.
+- Users are allowed to create and modify any tasks within a project.
+- Users are allowed to filter tasks based on specific keywords.
+- There is no plan to support project filtering
