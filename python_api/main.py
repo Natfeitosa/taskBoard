@@ -1,8 +1,7 @@
-from fastapi import FastAPI, Depends, APIRouter, Request, HTTPException, status
+from fastapi import FastAPI, Depends, Request, HTTPException, status
 from my_python_api.database import engine
 from my_python_api.models import Base
 from my_python_api.routers import users
-import os
 
 app = FastAPI()
 app.include_router(users.router)
