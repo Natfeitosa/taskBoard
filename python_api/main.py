@@ -1,31 +1,24 @@
-from typing import Optional
-from fastapi import FastAPI, Response, status, HTTPException, Depends
-from fastapi.params import Body
-from sqlalchemy.orm import Session
-from my_python_api.database import engine, get_db
-from my_python_api import models, schemas, utils
-
+from fastapi import FastAPI, Depends, APIRouter, Request, HTTPException, status
+from my_python_api.database import engine
+from my_python_api.models import Base
+from my_python_api.routers import users
+import os
 
 app = FastAPI()
-models.Base.metadata.create_all(bind=engine)
+app.include_router(users.router)
+Base.metadata.create_all(bind=engine)
+
+def getTokenFromCookie(request: Request):
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid access token")
+    return token
 
 @app.get("/")
-def root():
-    return {"message" : "Hello World"}
+async def root():
+    return {"Welcome to the home page"}
 
-@app.post("/register", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
-def register_user(user: schemas.UserRegister, db: Session = Depends(get_db)):
-    # hash the password
-    hashedPassword = utils.hash(user.password)
-    user.password = hashedPassword
-    
-    new_register = models.User(**user.dict())
-    db.add(new_register)
-    db.commit()
-    db.refresh(new_register)
-    return new_register
+@app.get("/protected")
+def protected_endpoint(token: str = Depends(getTokenFromCookie)):
+    return f"Your token is: {token}"
 
-@app.get("/login", status_code=status.HTTP_200_OK, response_model=schemas.UserLoginOut)
-def test_login(user: schemas.UserLogin, db: Session = Depends(get_db)):
-    logins = db.query(models.Login).first()
-    return {"status": logins}

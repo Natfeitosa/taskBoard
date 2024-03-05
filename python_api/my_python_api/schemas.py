@@ -1,5 +1,13 @@
-from pydantic import BaseModel, EmailStr, ValidationError
-from datetime import datetime
+from pydantic import BaseModel, EmailStr
+
+class UserLogin(BaseModel):
+    username: EmailStr
+    password: str
+    
+class UserLoginOut(BaseModel):
+    username: EmailStr
+    class Config:
+        orm_mode = True
 
 class UserRegister(BaseModel):
     firstName: str
@@ -7,21 +15,9 @@ class UserRegister(BaseModel):
     email: EmailStr
     password: str
     
-class UserOut(BaseModel):
+class UserRegisterOut(BaseModel):
     firstName: str
     lastName: str
     email: EmailStr
-    created_at: datetime
-    
     class Config:
         orm_mode = True
-    
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
-    
-class UserLoginOut(BaseModel):
-    email: EmailStr
-    
-    class Config:
-        orm_model = True
