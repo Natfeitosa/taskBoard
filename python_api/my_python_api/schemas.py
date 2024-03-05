@@ -1,13 +1,13 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic.dataclasses import dataclass
 
 class UserLogin(BaseModel):
     username: EmailStr
     password: str
     
+@dataclass(config=ConfigDict(validate_assignment=True, from_attributes=True))
 class UserLoginOut(BaseModel):
     username: EmailStr
-    class Config:
-        orm_mode = True
 
 class UserRegister(BaseModel):
     firstName: str
@@ -15,9 +15,8 @@ class UserRegister(BaseModel):
     email: EmailStr
     password: str
     
+@dataclass(config=ConfigDict(validate_assignment=True, from_attributes=True))
 class UserRegisterOut(BaseModel):
     firstName: str
     lastName: str
     email: EmailStr
-    class Config:
-        orm_mode = True

@@ -11,14 +11,14 @@ router = APIRouter(
 )
 
 # Register endpoint
-@router.post("/register", status_code=status.HTTP_200_OK, response_model=schemas.UserRegisterOut)
+@router.post("/register", status_code=status.HTTP_201_CREATED, response_model=schemas.UserRegisterOut)
 def register_user(newUser: schemas.UserRegister):
     # Sends call to auth server
     address = f"{authServerURL}/register"
     response = requests.post(address, json=newUser.model_dump(), headers={"Content-Type": "application/json"})
     
     # Handles response
-    if response.status_code == 200:
+    if response.status_code == 201:
         return newUser
     else:
         raise HTTPException(status_code=response.status_code, detail="Unexpected Error")
