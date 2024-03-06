@@ -36,7 +36,8 @@ Tasks model represents a task within a project.
 - Description (string): A detailed description of the task. This property is a string and is public and accessible.   
 - DateCreated (DateOnly): The date the task was created. This property is of type DateOnly and is public and accessible.  
 - LastModified (DateTime): The date and time the task was last modified. This property is of type DateTime and is public and accessible.  
-- AssigneeId (Guid): The unique identifier of the user assigned to the task. This property is of type Guid and is public and accessible.  
+- AssigneeId (Guid): The unique identifier of the user assigned to the task. This property is of type Guid and is public and accessible.
+- TaskId (Guid): The unique identifier for the task. This property is of type Guid and is always public and accessible.
 ```C#
  public class Tasks
     {
@@ -46,7 +47,7 @@ Tasks model represents a task within a project.
         public DateOnly DateCreated { get; set; }
         public DateTime LastModified { get; set; }
         public Guid AssigneeId { get; set; }
-        public Guid Id { get;set; } 
+        public Guid TaskId { get;set; }
     }
 ```
 
