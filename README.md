@@ -5,26 +5,21 @@ Task board application implementing backend web design
 ## Project
 Project Class Documentation
 This document describes the Project model.  
-Please choose between AuthorID or the whole Author model for the project scheme. **NOT BOTH**
 
-- id (Guid): A unique identifier for the project. This property is of type Guid and is always public and accessible.  
+- ProjectId (Guid): A unique identifier for the project. This property is of type Guid and is always public and accessible.  
 - Tasks (ICollection<Tasks>): A collection of Task objects associated with the project. This property allows for null values and should be accessed through the get method only.  
 - LastModified (DateTime): The date and time the project was last modified. This property is of type DateTime and is public and accessible.   
 - DateCreated (DateOnly): The date the project was created. This property is of type DateOnly and is public and accessible.   
 - AuthorId (Guid): The unique identifier of the user who created the project. This property is of type Guid and is public and accessible. 
-- Author (User): The user who created the project. This property allows for null values and should be accessed through the get method only. It is of type User.   
 ```C#
  public class Project
     {
-        public Guid id { get; set; }
+        public Guid ProjectId { get; set; }
         [AllowNull]
         public ICollection<Tasks> Tasks { get; set; }
         public DateTime LastModified { get; set; }
         public DateOnly DateCreated { get; set; }
         public Guid AuthorId { get; set; }
-        [AllowNull]
-        public User Author { get; set; }
-
     }
 ```
 
