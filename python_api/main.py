@@ -19,5 +19,6 @@ async def root():
 
 @app.get("/protected")
 def protected_endpoint(token: str = Depends(getTokenFromCookie)):
-    return f"Your token is: {token}"
+    return f"Your token aa is: {token}"
+
 
