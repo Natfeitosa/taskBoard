@@ -1,6 +1,9 @@
 from fastapi import FastAPI, Depends, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from .my_python_api.routers import users, projects, tasks
+from .my_python_api.database import Base, engine
+
+Base.metadata.create_all(engine)
 
 app = FastAPI()
 origins = ["*"]
@@ -16,6 +19,7 @@ app.add_middleware(
 app.include_router(users.router)
 app.include_router(projects.router)
 app.include_router(tasks.router)
+
 
 def getTokenFromCookie(request: Request):
     token = request.cookies.get("access_token")

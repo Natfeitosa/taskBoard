@@ -16,16 +16,16 @@ router = APIRouter(
 
 # Register endpoint
 @router.post("/register", status_code=status.HTTP_201_CREATED, response_model=schemas.UserRegisterOut)
-def register_user(newUser: schemas.UserRegister):
+def register_user(newUser: schemas.UserRegister, db: Session = Depends(get_db)):
     # Sends call to auth server
     address = f"{authServerURL}/register"
     response = requests.post(address, json=newUser.model_dump(), headers={"Content-Type": "application/json"})
     
     # Handles response
-    if response.status_code == 201:
+    if response.status_code == 200:
         # passes user data onto postgres database
         try:
-            create_user(newUser.model_dump(exclude={"password"}))
+            create_user(newUser.model_dump(exclude={"password"}), db=db)
         except Exception as error:
             print(f"Error creating postgres user: {error}")
         return newUser
@@ -61,9 +61,10 @@ def create_user(user_data: dict, db: Session = Depends(get_db)):
     # Create user without password and with unique ID
     new_user = models.User(
         user_id=unique_id,
-        **user_data
+        email=user_data["email"],
+        first_name=user_data["firstName"],
+        last_name=user_data["lastName"]
     )
-    
     # Add onto database
     db.add(new_user)
     db.commit()

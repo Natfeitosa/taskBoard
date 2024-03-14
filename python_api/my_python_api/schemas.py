@@ -25,5 +25,5 @@ class UserRegisterOut(BaseModel):
     
     
 class ProjectBase(BaseModel):
-    lastModified: datetime
-    dateCreated: date
+    last_modified: datetime
+    date_created: date
