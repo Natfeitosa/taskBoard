@@ -3,7 +3,7 @@ from pytest import Session
 from .. import schemas, models
 from ..config import settings
 from ..database import get_db
-from fastapi import Depends, status, HTTPException, APIRouter, Response, Request
+from fastapi import Depends, status, HTTPException, APIRouter, Request
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
@@ -11,6 +11,14 @@ authServerURL = f'{settings.auth_database_url}'
 router = APIRouter(
     tags=['Projects']
 )
+
+
+# Helper function that validates the existence of a project
+def validProject(project_id: int, db: Session) -> bool:
+    project = db.query(models.Project).filter(models.Project.project_id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return True
 
 # Create project
 @router.post("/projects", status_code=status.HTTP_201_CREATED)

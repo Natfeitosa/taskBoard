@@ -1,8 +1,4 @@
-from enum import unique
 import uuid
-from venv import create
-from httpx import get
-from psycopg2 import IntegrityError
 from .. import schemas, models
 from ..config import settings
 from ..database import get_db

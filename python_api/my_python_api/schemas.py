@@ -1,4 +1,4 @@
-
+from enum import Enum
 from typing import List
 from pydantic import BaseModel, EmailStr, ConfigDict
 from pydantic.dataclasses import dataclass
@@ -40,3 +40,11 @@ class TaskBase(BaseModel):
     description: str
     date_created: date
     last_modified: datetime
+    
+@dataclass(config=ConfigDict(validate_assignment=True, from_attributes=True))
+class TaskOut(TaskBase):
+    task_id: int
+    assignee_id: str
+    project_id: int
+    status: Enum
+    
