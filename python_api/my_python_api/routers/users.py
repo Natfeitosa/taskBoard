@@ -47,8 +47,8 @@ def login_user(loginData: schemas.UserLogin, request: Request, responseCookie: R
         accessToken = tokens.get("accessToken")
         responseCookie.set_cookie(key="access_token", value=accessToken, httponly=True, secure=True, samesite='lax')
   
-        currentUser = current_userInformation(loginData.username)
-        responseCookie.set_cookie(key="user_id", value=currentUser.user_id.text, httponly=True, secure=True, samesite='lax')
+        currentUser = current_userInformation(loginData.username, db)
+        responseCookie.set_cookie(key="user_id", value=str(currentUser.user_id), httponly=True, secure=True, samesite='lax')
         return loginData
     else:
         raise HTTPException(status_code=response.status_code, detail="Invalid credentials")
@@ -73,7 +73,7 @@ def create_user(user_data: dict, db: Session = Depends(get_db)):
     return new_user
 
 # Returns current user information via email
-def current_userInformation(userEmail: str, db: Session = Depends(get_db)):
+def current_userInformation(userEmail: str, db: Session):
     # Finds the first intstance of the user with the provided email
     currentUser = db.query(models.User).filter(models.User.email == userEmail).first()
     if not currentUser:
