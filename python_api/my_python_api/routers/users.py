@@ -1,6 +1,12 @@
-from .. import schemas
+import uuid
+from venv import create
+from httpx import get
+from psycopg2 import IntegrityError
+from .. import schemas, models
 from ..config import settings
-from fastapi import status, HTTPException, APIRouter, Response
+from ..database import get_db
+from fastapi import status, HTTPException, APIRouter, Response, Depends
+from sqlalchemy.orm import Session
 import requests
 
 authServerURL = f'{settings.auth_database_url}'
@@ -17,6 +23,11 @@ def register_user(newUser: schemas.UserRegister):
     
     # Handles response
     if response.status_code == 201:
+        # passes user data onto postgres database
+        try:
+            create_user(newUser.model_dump(exclude={"password"}))
+        except Exception as error:
+            print(f"Error creating postgres user: {error}")
         return newUser
     else:
         raise HTTPException(status_code=response.status_code, detail="Unexpected Error")
@@ -41,3 +52,21 @@ def login_user(loginData: schemas.UserLogin, responseCookie: Response):
         return loginData
     else:
         raise HTTPException(status_code=response.status_code, detail="Invalid credentials")
+
+def create_user(user_data: dict, db: Session = Depends(get_db)):
+    # Generate a unique ID
+    unique_id = str(uuid.uuid4())
+
+    # Create user without password and with unique ID
+    new_user = models.User(
+        user_id=unique_id,
+        email=user_data["email"],
+        first_name=user_data["firstname"],
+        last_name=user_data["lastname"]
+    )
+    
+    # Add onto database
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user

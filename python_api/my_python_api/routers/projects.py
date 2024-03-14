@@ -1,6 +1,10 @@
-from .. import schemas
+from hmac import new
+from pytest import Session
+from .. import schemas, models
 from ..config import settings
-from fastapi import status, HTTPException, APIRouter, Response
+from ..database import get_db
+from fastapi import Depends, status, HTTPException, APIRouter, Response
+from sqlalchemy.orm import Session
 import requests
 
 authServerURL = f'{settings.auth_database_url}'
@@ -9,14 +13,11 @@ router = APIRouter(
 )
 
 # Register endpoint
-@router.post("/projects", status_code=status.HTTP_201_CREATED, response_model=schemas.Project)
-def create_project(newProject: schemas.ProjectCreate):
-    # Sends call to auth server
-    address = f"{authServerURL}/register"
-    response = requests.post(address, json=newUser.model_dump(), headers={"Content-Type": "application/json"})
+@router.post("/projects", status_code=status.HTTP_201_CREATED)
+def create_project(newProject: schemas.ProjectBase, db: Session = Depends(get_db)):
+    newProject = models.Project(**newProject.model_dump())
+    db.add(newProject)
+    db.commit()
+    db.refresh(newProject)
     
-    # Handles response
-    if response.status_code == 201:
-        return newUser
-    else:
-        raise HTTPException(status_code=response.status_code, detail="Unexpected Error")
+    return newProject

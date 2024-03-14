@@ -1,5 +1,7 @@
+
 from pydantic import BaseModel, EmailStr, ConfigDict
 from pydantic.dataclasses import dataclass
+from datetime import date, datetime
 
 class UserLogin(BaseModel):
     username: EmailStr
@@ -20,3 +22,10 @@ class UserRegisterOut(BaseModel):
     firstName: str
     lastName: str
     email: EmailStr
+    
+    
+class ProjectBase(BaseModel):
+    projectId: int
+    lastModified: datetime
+    dateCreated: date
+    authorId: int
