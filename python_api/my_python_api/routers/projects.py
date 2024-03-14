@@ -71,6 +71,6 @@ def update_project(request: Request, id: int, updateProject: schemas.ProjectUpda
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id: int, db: Session = Depends(get_db)):
     project = validProjectAndReturn(id, db)
-    project.delete(synchronize_session=False)
+    db.delete(project)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
