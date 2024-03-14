@@ -15,4 +15,5 @@
 venv/*
 python_api/__pycache__/*
 python_api/my_python_api/__pycache__/*
+python_api/my_python_api/routers/__pycache__/*
 .env
