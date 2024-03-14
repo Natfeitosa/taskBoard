@@ -2,8 +2,6 @@ from .. import schemas
 from ..config import settings
 from fastapi import status, HTTPException, APIRouter, Response
 import requests
-import os
-
 
 authServerURL = f'{settings.auth_database_url}'
 router = APIRouter(
@@ -34,10 +32,12 @@ def login_user(loginData: schemas.UserLogin, responseCookie: Response):
     if response.status_code == 200:
         tokens = response.json()
         accessToken = tokens.get("accessToken")
+        userEmail = loginData.username
         # TO DO
         refreshToken = tokens.get("refreshToken")
         # Sets token in a cookie
         responseCookie.set_cookie(key="access_token", value=accessToken, httponly=True, secure=True, samesite='lax')
+        responseCookie.set_cookie(key="user_email", value=userEmail, httponly=True, secure=True, samesite='lax')
         return loginData
     else:
         raise HTTPException(status_code=response.status_code, detail="Invalid credentials")

@@ -1,5 +1,5 @@
 from .database import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Date, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Date, Enum, false, null
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
 from sqlalchemy.orm import relationship
@@ -10,6 +10,13 @@ class Status(enum.Enum):
     IN_PROGRESS = 1
     COMPLETED = 2
     
+class User(Base):
+    __tablename__ = "users"
+    
+    email = Column(String, nullable=False, unique=True)
+    user_id = Column(Integer, primary_key=True, nullable=False)
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
 class Project(Base):
     __tablename__ = "projects"
     
@@ -17,7 +24,9 @@ class Project(Base):
     tasks = relationship("Task", backref="project")
     last_modified = Column(DateTime, nullable=False)
     date_created = Column(Date, nullable=False)
-    author_id = Column(Integer)
+    author_id = Column(Integer, ForeignKey(
+        "users.user_id"), nullable=False)
+    owner = relationship("User")
     
 class Task(Base):
     __tablename__ = "tasks"
@@ -28,6 +37,6 @@ class Task(Base):
     date_created = Column(Date, nullable=False)
     last_modified = Column(DateTime, nullable=False)
     task_id = Column(Integer, primary_key=True)
-    assignee_id = Column(Integer, nullable=False)
-    # probably don't need this
-    #project_id = Column(Integer, ForeignKey("projects.project_id"))
+    assignee_id = Column(Integer, ForeignKey(
+        "users.user_id"), nullable=False)
+    
