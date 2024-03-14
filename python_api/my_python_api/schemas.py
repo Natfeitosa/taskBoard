@@ -25,7 +25,5 @@ class UserRegisterOut(BaseModel):
     
     
 class ProjectBase(BaseModel):
-    projectId: int
     lastModified: datetime
     dateCreated: date
-    authorId: int

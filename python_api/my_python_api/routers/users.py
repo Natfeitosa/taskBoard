@@ -5,7 +5,7 @@ from psycopg2 import IntegrityError
 from .. import schemas, models
 from ..config import settings
 from ..database import get_db
-from fastapi import status, HTTPException, APIRouter, Response, Depends
+from fastapi import Request, status, HTTPException, APIRouter, Response, Depends
 from sqlalchemy.orm import Session
 import requests
 
@@ -53,6 +53,7 @@ def login_user(loginData: schemas.UserLogin, responseCookie: Response):
     else:
         raise HTTPException(status_code=response.status_code, detail="Invalid credentials")
 
+# Create user in postgres database
 def create_user(user_data: dict, db: Session = Depends(get_db)):
     # Generate a unique ID
     unique_id = str(uuid.uuid4())
@@ -60,9 +61,7 @@ def create_user(user_data: dict, db: Session = Depends(get_db)):
     # Create user without password and with unique ID
     new_user = models.User(
         user_id=unique_id,
-        email=user_data["email"],
-        first_name=user_data["firstname"],
-        last_name=user_data["lastname"]
+        **user_data
     )
     
     # Add onto database
@@ -70,3 +69,11 @@ def create_user(user_data: dict, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+# Returns current user information
+def current_user(request: Request, db: Session = Depends(get)):
+    # Finds the user email via cookie
+    userEmail = request.cookies.get("user_email")
+    # Finds the first intstance of the user with the provided email
+    currentUser = db.query(models.User).filter(models.User.email == userEmail).first()
+    return currentUser
