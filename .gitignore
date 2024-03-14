@@ -11,9 +11,9 @@
 /auth_server/AuthServer.Database/bin
 /auth_server/AuthServer.Test/obj
 /auth_server/AuthServer.Test/bin
-.vscode/launch.json
 venv/*
 python_api/__pycache__/*
 python_api/my_python_api/__pycache__/*
 python_api/my_python_api/routers/__pycache__/*
 .env
+.vscode/*
