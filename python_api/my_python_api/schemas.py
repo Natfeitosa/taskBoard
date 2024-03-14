@@ -34,6 +34,10 @@ class ProjectBase(BaseModel):
 class ProjectOut(ProjectBase):
     author_id: str
     project_id: int
+
+class ProjectUpdate(BaseModel):
+    title: str
+    last_modified: datetime
     
 class TaskBase(BaseModel):
     title: str
