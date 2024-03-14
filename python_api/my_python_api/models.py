@@ -21,6 +21,7 @@ class Project(Base):
     
     tasks = relationship("Task", backref="project")
     owner = relationship("User")
+    title = Column(String(255), nullable=False)
     project_id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     last_modified = Column(DateTime, nullable=False)
     date_created = Column(Date, nullable=False)

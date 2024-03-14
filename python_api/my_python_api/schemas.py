@@ -27,3 +27,4 @@ class UserRegisterOut(BaseModel):
 class ProjectBase(BaseModel):
     last_modified: datetime
     date_created: date
+    title: str

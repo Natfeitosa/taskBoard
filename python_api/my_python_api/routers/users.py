@@ -1,3 +1,4 @@
+from enum import unique
 import uuid
 from venv import create
 from httpx import get
@@ -34,28 +35,27 @@ def register_user(newUser: schemas.UserRegister, db: Session = Depends(get_db)):
 
 # Login endpoint
 @router.post("/login", status_code=status.HTTP_200_OK, response_model=schemas.UserLoginOut)
-def login_user(loginData: schemas.UserLogin, responseCookie: Response):
+def login_user(loginData: schemas.UserLogin, request: Request, responseCookie: Response, db: Session = Depends(get_db)):
     # Sends call to auth server
     address = f"{authServerURL}/login"
     response = requests.post(address, json=loginData.model_dump(), headers={"Content-Type": "application/json"})
     
     # Handles response
     if response.status_code == 200:
+        # Setup Cookies
         tokens = response.json()
         accessToken = tokens.get("accessToken")
-        userEmail = loginData.username
-        # TO DO
-        refreshToken = tokens.get("refreshToken")
-        # Sets token in a cookie
         responseCookie.set_cookie(key="access_token", value=accessToken, httponly=True, secure=True, samesite='lax')
-        responseCookie.set_cookie(key="user_email", value=userEmail, httponly=True, secure=True, samesite='lax')
+  
+        currentUser = current_userInformation(loginData.username)
+        responseCookie.set_cookie(key="user_id", value=currentUser.user_id.text, httponly=True, secure=True, samesite='lax')
         return loginData
     else:
         raise HTTPException(status_code=response.status_code, detail="Invalid credentials")
 
 # Create user in postgres database
 def create_user(user_data: dict, db: Session = Depends(get_db)):
-    # Generate a unique ID
+    # Generate a unique ID & add onto user cookie
     unique_id = str(uuid.uuid4())
 
     # Create user without password and with unique ID
@@ -69,12 +69,13 @@ def create_user(user_data: dict, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
     return new_user
 
-# Returns current user information
-def current_user(request: Request, db: Session = Depends(get)):
-    # Finds the user email via cookie
-    userEmail = request.cookies.get("user_email")
+# Returns current user information via email
+def current_userInformation(userEmail: str, db: Session = Depends(get_db)):
     # Finds the first intstance of the user with the provided email
     currentUser = db.query(models.User).filter(models.User.email == userEmail).first()
+    if not currentUser:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
     return currentUser
