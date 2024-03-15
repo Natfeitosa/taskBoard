@@ -1,11 +1,25 @@
 from fastapi import FastAPI, Depends, Request, HTTPException, status
-from my_python_api.database import engine
-from my_python_api.models import Base
-from my_python_api.routers import users
+from fastapi.middleware.cors import CORSMiddleware
+from .my_python_api.routers import users, projects, tasks
+from .my_python_api.database import Base, engine
+
+Base.metadata.create_all(engine)
 
 app = FastAPI()
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 app.include_router(users.router)
-Base.metadata.create_all(bind=engine)
+app.include_router(projects.router)
+app.include_router(tasks.router)
+
 
 def getTokenFromCookie(request: Request):
     token = request.cookies.get("access_token")
@@ -20,4 +34,3 @@ async def root():
 @app.get("/protected")
 def protected_endpoint(token: str = Depends(getTokenFromCookie)):
     return f"Your token is: {token}"
-
