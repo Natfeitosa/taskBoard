@@ -39,5 +39,6 @@ namespace AuthServer.Database.Interface
         /// </summary>
         /// <returns></returns>
         public Task<ICollection<T>> GetAll();
+
     }
 }

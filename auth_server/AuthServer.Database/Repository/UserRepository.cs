@@ -20,6 +20,21 @@ namespace AuthServer.Database.Repository
             UserSet = context.Users;
         }
 
+        /// <summary>
+        /// DELETE ALL ENTITY FROM DATABASE, SHOULD NOT BE USED AS IT DOES NOT ARCHIVE
+        /// </summary>
+        /// <returns></returns>
+        public async Task DeleteAllUsers()
+        {
+            var users = await UserSet.ToListAsync();
+            foreach (var user in users)
+            {
+                user.IsDeleted = true;
+                UserSet.Remove(user);
+            }
+            await SaveContext();
+        }
+
         public async Task DeleteAsync(User entity)
         {
             UserSet.Remove(entity);

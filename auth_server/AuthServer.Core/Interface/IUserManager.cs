@@ -23,5 +23,7 @@ namespace AuthServer.Core.Interface
         /// <param name="data"></param>
         /// <returns></returns>
         Task RegisterUser(RegisterUser data);
+
+        Task DeleteAllUsers();
     }
 }
