@@ -1,5 +1,7 @@
 from h11 import Request
 from pytest import Session
+
+from python_api.my_python_api.routers.users import current_userInformation
 from .. import schemas, models
 from ..config import settings
 from ..database import get_db
@@ -11,7 +13,7 @@ from typing import List, Optional
 authServerURL = f'{settings.auth_database_url}'
 router = APIRouter(
     tags=['Projects'],
-    prefix="/Projects"
+    prefix="/projects"
 )
 
 
@@ -57,12 +59,21 @@ def get_one_project(id: int, db: Session = Depends(get_db)):
 @router.put("/{id}", response_model=schemas.ProjectOut)
 def update_project(request: Request, id: int, updateProject: schemas.ProjectUpdate, db: Session = Depends(get_db)):
     project = validProjectAndReturn(id, db)
-    userID = request.cookies.get("user_id")
+
+    # Reassigns project owner
+    if updateProject.email is not None:
+        userID = request.cookies.get("user_id")
+        if userID == project.author_id:
+            newUserInfo = current_userInformation(updateProject.email, db)
+            project.author_id = newUserInfo.user_id
+        else:
+            # to do: add actual stuff here
+            print("didnt run")
 
     # Update project attributes
     for field, value in updateProject.model_dump(exclude_unset=True).items():
         setattr(project, field, value)
-        
+    
     db.add(project)
     db.commit()
     return project

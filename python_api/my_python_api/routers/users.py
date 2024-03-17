@@ -70,7 +70,7 @@ def create_user(user_data: dict, db: Session = Depends(get_db)):
 
 # Returns current user information via email
 def current_userInformation(userEmail: str, db: Session):
-    # Finds the first intstance of the user with the provided email
+    # Finds the first instance of the user with the provided email
     currentUser = db.query(models.User).filter(models.User.email == userEmail).first()
     if not currentUser:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
