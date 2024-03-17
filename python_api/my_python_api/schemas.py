@@ -53,18 +53,18 @@ class TaskBase(BaseModel):
     description: str
     date_created: date
     last_modified: datetime
-    state: State = Field(validate_default=True)
+    state: Optional[State] = Field(default=State.PROPOSED)
     
 @dataclasses.dataclass(config=ConfigDict(validate_assignment=True, from_attributes=True))
 class TaskOut(TaskBase):
     task_id: int
     assignee_id: str
     project_id: int
-    state: State = Field(validate_default=True)
+    state: State
 
 class TaskUpdate(BaseModel):
     last_modified: datetime
     title: Optional[str] = None
     description: Optional[str] = None
-    state: Optional[State] = Field(validate_default=True)
+    state: Optional[State] = Field(default=State.PROPOSED)
     assignee_id: Optional[str] = None

@@ -21,9 +21,7 @@ def create_task(request: Request, project_id: int, task: schemas.TaskBase = Body
    
     # Default to the current user as assignee
     userID = request.cookies.get("user_id")
-    # # Default to the proposed state
-    # currentState = models.State.PROPOSED
-    
+
     # Create the task and associate it with the project
     task = models.Task(assignee_id=userID, project_id=project_id, **task.model_dump())
     db.add(task)
