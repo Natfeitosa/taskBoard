@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Date, Enum
 from sqlalchemy.orm import relationship
 import enum
 
-class State(enum.Enum):
+class State(enum.IntEnum):
     PROPOSED = 0
     IN_PROGRESS = 1
     COMPLETED = 2
@@ -30,7 +30,7 @@ class Project(Base):
 class Task(Base):
     __tablename__ = "tasks"
     
-    status = Column(Enum(State), nullable=False)
+    state = Column(Enum(State, create_constraint=True, name="state_enum"), nullable=False)
     title = Column(String(255), nullable=False)
     description = Column(String)
     date_created = Column(Date, nullable=False)

@@ -1,7 +1,12 @@
-from enum import Enum
+from enum import IntEnum
 from typing import List, Optional
-from pydantic import BaseModel, EmailStr, ConfigDict, dataclasses
+from pydantic import BaseModel, EmailStr, ConfigDict, Field, dataclasses
 from datetime import date, datetime
+ 
+class State(IntEnum):
+    PROPOSED = 0
+    IN_PROGRESS = 1
+    COMPLETED = 2
 
 class TaskId(BaseModel):
     task_id: int
@@ -48,11 +53,18 @@ class TaskBase(BaseModel):
     description: str
     date_created: date
     last_modified: datetime
+    state: State = Field(validate_default=True)
     
 @dataclasses.dataclass(config=ConfigDict(validate_assignment=True, from_attributes=True))
 class TaskOut(TaskBase):
     task_id: int
     assignee_id: str
     project_id: int
-    status: Enum
-    
+    state: State = Field(validate_default=True)
+
+class TaskUpdate(BaseModel):
+    last_modified: datetime
+    title: Optional[str] = None
+    description: Optional[str] = None
+    state: Optional[State] = Field(validate_default=True)
+    assignee_id: Optional[str] = None

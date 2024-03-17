@@ -31,6 +31,7 @@ def getTokenFromCookie(request: Request):
 async def root():
     return {"Welcome to the home page"}
 
-@app.get("/protected")
-def protected_endpoint(token: str = Depends(getTokenFromCookie)):
+# DEV ONLY. 
+@app.get("/token")
+def return_token(token: str = Depends(getTokenFromCookie)):
     return f"Your token is: {token}"

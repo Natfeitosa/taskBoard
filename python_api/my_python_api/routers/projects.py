@@ -24,7 +24,7 @@ def validProject(project_id: int, db: Session) -> bool:
         raise HTTPException(status_code=404, detail="Project not found")
     return True
 
-# Helper function taht validates a project, and returns it
+# Helper function that validates a project, and returns it
 def validProjectAndReturn(project_id: int, db: Session):
     project = db.query(models.Project).filter(models.Project.project_id == project_id).first()
     if not project:
@@ -45,7 +45,7 @@ def create_project(request: Request, newProject: schemas.ProjectBase, db: Sessio
 
 # Get all projects
 @router.get("/", response_model=List[schemas.ProjectOut])
-def get_projects(db: Session = Depends(get_db), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
+def get_all_projects(db: Session = Depends(get_db), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
     projects = db.query(models.Project).filter(models.Project.title.contains(search)).limit(limit).offset(skip).all()
     return projects
 
@@ -80,7 +80,7 @@ def update_project(request: Request, id: int, updateProject: schemas.ProjectUpda
 
 # Delete a project
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(id: int, db: Session = Depends(get_db)):
+def delete_project(id: int, db: Session = Depends(get_db)):
     project = validProjectAndReturn(id, db)
     db.delete(project)
     db.commit()
