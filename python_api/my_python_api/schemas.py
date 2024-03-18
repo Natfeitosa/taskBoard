@@ -67,4 +67,4 @@ class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     state: Optional[State] = Field(default=State.PROPOSED)
-    assignee_id: Optional[str] = None
+    email: Optional[EmailStr] = None
