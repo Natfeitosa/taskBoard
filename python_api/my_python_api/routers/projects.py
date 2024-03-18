@@ -67,8 +67,14 @@ def update_project(request: Request, id: int, updateProject: schemas.ProjectUpda
 
 # Delete a project
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_project(id: int, db: Session = Depends(database.get_db)):
+def delete_project(request: Request, id: int, db: Session = Depends(database.get_db)):
     project = validProjectAndReturn(id, db)
+    
+    # Check if current user is project owner
+    userID = request.cookies.get("user_id")
+    if userID != project.author_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform requested action")
+    
     db.delete(project)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)

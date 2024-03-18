@@ -19,7 +19,7 @@ class User(Base):
 class Project(Base):
     __tablename__ = "projects"
     
-    tasks = relationship("Task", backref="project")
+    tasks = relationship("Task", back_populates="project", cascade="all, delete-orphan")
     owner = relationship("User")
     title = Column(String(255), nullable=False)
     project_id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
@@ -30,6 +30,7 @@ class Project(Base):
 class Task(Base):
     __tablename__ = "tasks"
     
+    project = relationship("Project", back_populates="tasks")
     state = Column(Enum(State, create_constraint=True, name="state_enum"), nullable=False)
     title = Column(String(255), nullable=False)
     description = Column(String)

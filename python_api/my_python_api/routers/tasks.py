@@ -65,7 +65,7 @@ def update_task(task_id: int, updateTask: schemas.TaskUpdate, db: Session = Depe
 
 # Delete a task
 @router.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_project(task_id: int, db: Session = Depends(database.get_db)):
+def delete_task(task_id: int, db: Session = Depends(database.get_db)):
     task = validTaskAndReturn(task_id, db)
     db.delete(task)
     db.commit()

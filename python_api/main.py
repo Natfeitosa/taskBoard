@@ -33,5 +33,7 @@ async def root():
 
 # DEV ONLY. 
 @app.get("/token")
-def return_token(token: str = Depends(getTokenFromCookie)):
-    return f"Your token is: {token}"
+def return_token(request: Request):
+    token = request.cookies.get("access_token")
+    userID = request.cookies.get("user_id")
+    return f"Current user is: {userID}, your token is: {token}"
