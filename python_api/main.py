@@ -31,6 +31,9 @@ def getTokenFromCookie(request: Request):
 async def root():
     return {"Welcome to the home page"}
 
-@app.get("/protected")
-def protected_endpoint(token: str = Depends(getTokenFromCookie)):
-    return f"Your token is: {token}"
+# DEV ONLY. 
+@app.get("/token")
+def return_token(request: Request):
+    token = request.cookies.get("access_token")
+    userID = request.cookies.get("user_id")
+    return f"Current user is: {userID}, your token is: {token}"
