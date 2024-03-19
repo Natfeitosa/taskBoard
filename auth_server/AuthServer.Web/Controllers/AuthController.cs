@@ -3,6 +3,7 @@ using AuthServer.Core.Model;
 using AuthServer.Web.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AuthServer.Web.Controllers
 {
@@ -50,9 +51,14 @@ namespace AuthServer.Web.Controllers
 
         [Authorize]
         [HttpGet("/verify")]
-        public ActionResult HealthCheck()
+        public ActionResult<VerifyDto> VerifyToken()
         {
-            return Ok();
+           var claim = HttpContext.User.Claims.FirstOrDefault(x => ClaimTypes.NameIdentifier == x.Type);
+            if (claim == null)
+            {
+                return new StatusCodeResult(401);
+            }
+            return Ok(new VerifyDto() { Email = claim.Value });
         }
 
 
