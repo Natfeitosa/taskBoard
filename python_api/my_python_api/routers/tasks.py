@@ -21,6 +21,9 @@ def validTaskAndReturn(task_id: int, db: Session):
 # Create a task under a specified project id
 @router.post("/tasks")
 def create_task(request: Request, project_id: int, task: schemas.TaskBase = Body(...), db: Session = Depends(database.get_db)):
+    # validate token
+    users.checkAuthorization(request)
+    
     # Check if project exists
     projects.validProjectAndReturn(project_id, db)
    
@@ -48,7 +51,10 @@ def get_one_task(task_id: int, db: Session = Depends(database.get_db)):
 
 # Update a task
 @router.put("/tasks/{task_id}", response_model=schemas.TaskOut)
-def update_task(task_id: int, updateTask: schemas.TaskUpdate, db: Session = Depends(database.get_db)):
+def update_task(request: Request, task_id: int, updateTask: schemas.TaskUpdate, db: Session = Depends(database.get_db)):
+    # validate token
+    users.checkAuthorization(request)
+    
     task = validTaskAndReturn(task_id, db)
     
     # Reassigns task assignee
@@ -65,7 +71,9 @@ def update_task(task_id: int, updateTask: schemas.TaskUpdate, db: Session = Depe
 
 # Delete a task
 @router.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_task(task_id: int, db: Session = Depends(database.get_db)):
+def delete_task(request: Request, task_id: int, db: Session = Depends(database.get_db)):
+    # validate token
+    users.checkAuthorization(request)
     task = validTaskAndReturn(task_id, db)
     db.delete(task)
     db.commit()

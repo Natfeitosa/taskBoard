@@ -1,6 +1,6 @@
 from fastapi.security import OAuth2PasswordBearer
 from pytest import Session
-from python_api.my_python_api.routers import users, security
+from python_api.my_python_api.routers import users
 from .. import schemas, models, config, database
 from fastapi import Depends, Response, status, HTTPException, APIRouter, Request
 from sqlalchemy.orm import Session
@@ -21,7 +21,10 @@ def validProjectAndReturn(project_id: int, db: Session):
 
 # Create project
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create_project(request: Request, newProject: schemas.ProjectBase, db: Session = Depends(database.get_db), currentUser: int = Depends(security.get_current_user)):
+def create_project(request: Request, newProject: schemas.ProjectBase, db: Session = Depends(database.get_db)):
+    # validate token
+    users.checkAuthorization(request)
+    
     # Retrives the current user via cookie
     userID = request.cookies.get("user_id")
     # Adds onto database
@@ -46,6 +49,9 @@ def get_one_project(id: int, db: Session = Depends(database.get_db)):
 # Update a project
 @router.put("/{id}", response_model=schemas.ProjectOut)
 def update_project(request: Request, id: int, updateProject: schemas.ProjectUpdate, db: Session = Depends(database.get_db)):
+    # validate token
+    users.checkAuthorization(request)
+    
     project = validProjectAndReturn(id, db)
 
     # Reassigns project owner
@@ -69,6 +75,9 @@ def update_project(request: Request, id: int, updateProject: schemas.ProjectUpda
 # Delete a project
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_project(request: Request, id: int, db: Session = Depends(database.get_db)):
+    # validate token
+    users.checkAuthorization(request)
+    
     project = validProjectAndReturn(id, db)
     
     # Check if current user is project owner
