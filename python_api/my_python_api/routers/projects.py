@@ -1,5 +1,6 @@
+from fastapi.security import OAuth2PasswordBearer
 from pytest import Session
-from python_api.my_python_api.routers import users
+from python_api.my_python_api.routers import users, security
 from .. import schemas, models, config, database
 from fastapi import Depends, Response, status, HTTPException, APIRouter, Request
 from sqlalchemy.orm import Session
@@ -20,7 +21,7 @@ def validProjectAndReturn(project_id: int, db: Session):
 
 # Create project
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create_project(request: Request, newProject: schemas.ProjectBase, db: Session = Depends(database.get_db)):
+def create_project(request: Request, newProject: schemas.ProjectBase, db: Session = Depends(database.get_db), currentUser: int = Depends(security.get_current_user)):
     # Retrives the current user via cookie
     userID = request.cookies.get("user_id")
     # Adds onto database
