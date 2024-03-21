@@ -1,0 +1,7 @@
+<form [formGroup]="userLogin">
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email">
+
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password">
+    <button type="submit" [disabled]="!userLogin.valid">Submit</button>
