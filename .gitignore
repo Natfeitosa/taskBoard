@@ -1,0 +1,19 @@
+
+/auth_server/AuthServer.Web/.vs
+/auth_server/AuthServer.Web/obj
+/auth_server/AuthServer.Web/bin
+/auth_server/AuthServer.Web/.vs/Auth Server/FileContentIndex/288a7982-df5d-4cbd-a358-8440d724c194.vsidx
+/auth_server/AuthServer.Web/.vs/Auth Server/v17/.suo
+/auth_server/AuthServer.Core/bin
+/auth_server/AuthServer.Core/obj
+/auth_server/.vs
+/auth_server/AuthServer.Database/obj
+/auth_server/AuthServer.Database/bin
+/auth_server/AuthServer.Test/obj
+/auth_server/AuthServer.Test/bin
+venv/*
+python_api/__pycache__/*
+python_api/my_python_api/__pycache__/*
+python_api/my_python_api/routers/__pycache__/*
+.env
+.vscode/*
