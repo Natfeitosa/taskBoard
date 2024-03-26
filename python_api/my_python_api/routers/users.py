@@ -73,3 +73,16 @@ def userInformation(userEmail: str, db: Session):
     if not currentUser:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
     return currentUser
+
+# Checks if current token is valid
+def checkAuthorization(request: Request):
+    token = request.cookies.get("access_token")
+     # Sends call to auth server
+    address = f"{authServerURL}/verify"
+    response = requests.get(address, headers={'Authorization': f'Bearer {token}'})
+    
+    if response.status_code == status.HTTP_200_OK:
+        responseResult = response.json()
+        return responseResult["email"]
+    else:
+        raise HTTPException(status_code=response.status_code, detail="Invalid or expired token")
