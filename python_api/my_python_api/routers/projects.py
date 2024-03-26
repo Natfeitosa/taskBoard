@@ -19,7 +19,7 @@ def validProjectAndReturn(project_id: int, db: Session):
     return project
 
 # Create project
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("", status_code=status.HTTP_201_CREATED)
 def create_project(request: Request, newProject: schemas.ProjectBase, db: Session = Depends(database.get_db)):
     # Retrives the current user via cookie
     userID = request.cookies.get("user_id")
@@ -31,7 +31,7 @@ def create_project(request: Request, newProject: schemas.ProjectBase, db: Sessio
     return newProject
 
 # Get all projects
-@router.get("/", response_model=List[schemas.ProjectOut])
+@router.get("", response_model=List[schemas.ProjectOut])
 def get_all_projects(db: Session = Depends(database.get_db), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
     projects = db.query(models.Project).filter(models.Project.title.contains(search)).limit(limit).offset(skip).all()
     return projects
